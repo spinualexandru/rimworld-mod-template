@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/ide.host",
+  "symbolInfo": [
+    { "id": "modName", "isVisible": true },
+    { "id": "author", "isVisible": true },
+    { "id": "packageId", "isVisible": true },
+    { "id": "description", "isVisible": true },
+    { "id": "xml", "isVisible": true },
+    { "id": "csharp", "isVisible": true },
+    { "id": "harmony", "isVisible": true },
+    { "id": "settings", "isVisible": true },
+    { "id": "link", "isVisible": true }
+  ]
+}

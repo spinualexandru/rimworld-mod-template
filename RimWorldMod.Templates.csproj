@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Packs content/ into a dotnet new template package. Build with `dotnet pack`. -->
+  <PropertyGroup>
+    <PackageId>RimWorldMod.Templates</PackageId>
+    <Version>0.1.0</Version>
+    <Title>RimWorld mod template</Title>
+    <Authors>Alex Spinu</Authors>
+    <Description>dotnet new template for RimWorld 1.7 mods: XML definitions, a C# assembly and Harmony patches in any combination, plus a script that links the mod into the game.</Description>
+    <PackageTags>dotnet-new;templates;rimworld;rimworld-mod;modding;harmony</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/spinualexandru/rimworld-mod-template</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/spinualexandru/rimworld-mod-template.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageType>Template</PackageType>
+
+    <TargetFramework>net10.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <!-- content/ holds template files, not code for this project. -->
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <!-- Keep .template.config, .gitignore and .gitattributes in the package. -->
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <!-- Template packages have no lib/ folder. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="content/**" Exclude="content/**/bin/**;content/**/obj/**;content/**/1.7/**;content/**/.vs/**;content/**/.idea/**" PackagePath="content" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+bin/
+obj/
+*.nupkg
+
+# Output of building the template's own C# in place
+/content/RimWorldMod/1.7/
+
+.vs/
+.idea/
+*.user
+.DS_Store

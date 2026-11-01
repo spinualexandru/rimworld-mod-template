@@ -1,0 +1,14 @@
+# Build output (rebuilt by `dotnet build`)
+/1.7/Assemblies/
+bin/
+obj/
+
+# IDEs
+.vs/
+.idea/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db

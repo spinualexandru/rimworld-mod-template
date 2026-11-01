@@ -1,0 +1,7 @@
+* text=auto
+*.png binary
+*.psd binary
+*.dds binary
+*.ogg binary
+*.wav binary
+*.dll binary

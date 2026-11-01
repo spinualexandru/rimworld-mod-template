@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Patches edit defs that other mods (or the base game) declare, without
+  replacing their files. Operations are XPath based. Uncomment to try one:
+  this example makes vanilla steel stack to 150 instead of 75.
+
+  More operations: PatchOperationAdd, PatchOperationRemove,
+  PatchOperationReplace, PatchOperationConditional, PatchOperationFindMod, ...
+-->
+<Patch>
+  <!--
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="Steel"]</xpath>
+    <value>
+      <stackLimit>150</stackLimit>
+    </value>
+  </Operation>
+  -->
+</Patch>

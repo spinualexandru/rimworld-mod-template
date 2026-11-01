@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    Defs declare what things ARE. This one adds a craftable item.
+    Inherit from vanilla abstract defs (ParentName) so you only write what differs.
+    Prefix defNames with your mod's name so they never collide with other mods.
+  -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>RimWorldMod_ExampleItem</defName>
+    <label>example item</label>
+    <description>An example item added by XmlModName. Craft it at a crafting spot.</description>
+    <graphicData>
+      <!-- Relative to Textures/, without the extension. -->
+      <texPath>Things/Item/RimWorldMod/ExampleItem</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <stackLimit>25</stackLimit>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+    <statBases>
+      <MarketValue>15</MarketValue>
+      <Mass>0.5</Mass>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToMake>600</WorkToMake>
+    </statBases>
+    <costList>
+      <WoodLog>10</WoodLog>
+    </costList>
+    <!-- Generates a "Make example item" bill on the listed workbenches. -->
+    <recipeMaker>
+      <recipeUsers>
+        <li>CraftingSpot</li>
+      </recipeUsers>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    </recipeMaker>
+    <!--#if (useCsharp) -->
+    <!-- Comps attach C# behaviour to a def. See Source/RimWorldMod/Comps. -->
+    <comps>
+      <li Class="RimWorldMod.CompProperties_ExampleInfo">
+        <message>Hello from XmlModName! This line comes from a C# comp.</message>
+      </li>
+    </comps>
+    <!--#endif -->
+  </ThingDef>
+
+</Defs>

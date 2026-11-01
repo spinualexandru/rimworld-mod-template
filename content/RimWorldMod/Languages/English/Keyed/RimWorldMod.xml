@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Text used from C# via "Key".Translate(). Translations go in Languages/<Language>/Keyed. -->
+<LanguageData>
+  <RimWorldMod_ExampleToggle>Example toggle</RimWorldMod_ExampleToggle>
+  <RimWorldMod_ExampleToggleTooltip>An example setting. Read it anywhere through ModEntry.Settings.exampleToggle.</RimWorldMod_ExampleToggleTooltip>
+  <RimWorldMod_ExampleMultiplier>Example multiplier: {0}</RimWorldMod_ExampleMultiplier>
+</LanguageData>

@@ -1,0 +1,308 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Alex Spinu",
+  "classifications": ["Game", "Mod", "RimWorld"],
+  "identity": "RimWorldMod.Templates.Mod",
+  "name": "RimWorld Mod",
+  "description": "A RimWorld 1.7 mod with any mix of XML definitions, a C# assembly and Harmony patches, plus a script that links it into your game.",
+  "shortName": "rimworld-mod",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "symbols": {
+    "modName": {
+      "type": "parameter",
+      "datatype": "string",
+      "displayName": "Mod name",
+      "description": "Name in the in-game mod list. Default: the project name split into words."
+    },
+    "author": {
+      "type": "parameter",
+      "datatype": "string",
+      "displayName": "Author",
+      "description": "Your name, as shown in the mod list. Default: your user name."
+    },
+    "packageId": {
+      "type": "parameter",
+      "datatype": "string",
+      "displayName": "Package ID",
+      "description": "Unique ID like Author.ModName: letters, digits and dots, at least one dot, at most 60 characters. Never change it after publishing. Default: Author.ModName."
+    },
+    "description": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "A RimWorld mod.",
+      "displayName": "Description",
+      "description": "Short description for the mod list and the Workshop."
+    },
+    "xml": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "displayName": "XML Definitions",
+      "description": "What things are: items, buildings, recipes, research, stats."
+    },
+    "csharp": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "displayName": "C# Assembly",
+      "description": "What things do: comps, AI, events, UI, simulation."
+    },
+    "harmony": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "displayName": "Harmony Patches",
+      "description": "Change what the game's own code does. Adds the C# assembly too."
+    },
+    "settings": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "displayName": "Mod settings window",
+      "description": "Adds a page under Options > Mod settings. Only with C#."
+    },
+    "link": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "displayName": "Link into RimWorld",
+      "description": "Afterwards, run scripts/symlink.cs to link the mod into RimWorld's Mods folder. You're asked before it runs."
+    },
+
+    "useCsharp": {
+      "type": "computed",
+      "value": "(csharp || harmony)"
+    },
+    "useSettings": {
+      "type": "computed",
+      "value": "(settings && (csharp || harmony))"
+    },
+    "xmlAndCsharp": {
+      "type": "computed",
+      "value": "(xml && (csharp || harmony))"
+    },
+
+    "defaultModName": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "words"
+    },
+    "modNameValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "modName",
+        "fallbackVariableName": "defaultModName"
+      }
+    },
+    "assemblyName": {
+      "type": "derived",
+      "valueSource": "modNameValue",
+      "valueTransform": "identifier",
+      "replaces": "RimWorldMod",
+      "fileRename": "RimWorldMod"
+    },
+    "xmlModName": {
+      "type": "derived",
+      "valueSource": "modNameValue",
+      "valueTransform": "xml",
+      "replaces": "XmlModName"
+    },
+    "textModName": {
+      "type": "derived",
+      "valueSource": "modNameValue",
+      "valueTransform": "identity",
+      "replaces": "TextModName"
+    },
+    "csharpModName": {
+      "type": "derived",
+      "valueSource": "modNameValue",
+      "valueTransform": "csharpString",
+      "replaces": "CSharpModName"
+    },
+    "textDirName": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "identity",
+      "replaces": "TextDirName"
+    },
+
+    "userEnv": {
+      "type": "bind",
+      "binding": "env:USER",
+      "defaultValue": ""
+    },
+    "userNameEnv": {
+      "type": "bind",
+      "binding": "env:USERNAME",
+      "defaultValue": ""
+    },
+    "defaultAuthor": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "userEnv",
+        "fallbackVariableName": "userNameEnv"
+      }
+    },
+    "authorValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "author",
+        "fallbackVariableName": "defaultAuthor"
+      }
+    },
+    "xmlAuthor": {
+      "type": "derived",
+      "valueSource": "authorValue",
+      "valueTransform": "xml",
+      "replaces": "XmlAuthor"
+    },
+    "textAuthor": {
+      "type": "derived",
+      "valueSource": "authorValue",
+      "valueTransform": "identity",
+      "replaces": "TextAuthor"
+    },
+
+    "authorId": {
+      "type": "derived",
+      "valueSource": "authorValue",
+      "valueTransform": "packageIdPart"
+    },
+    "defaultPackageId": {
+      "type": "generated",
+      "generator": "join",
+      "parameters": {
+        "symbols": [
+          { "type": "ref", "value": "authorId" },
+          { "type": "ref", "value": "assemblyName" }
+        ],
+        "separator": "."
+      }
+    },
+    "packageIdValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "packageId",
+        "fallbackVariableName": "defaultPackageId"
+      }
+    },
+    "xmlPackageId": {
+      "type": "derived",
+      "valueSource": "packageIdValue",
+      "valueTransform": "xml",
+      "replaces": "XmlPackageId"
+    },
+    "textPackageId": {
+      "type": "derived",
+      "valueSource": "packageIdValue",
+      "valueTransform": "identity",
+      "replaces": "TextPackageId"
+    },
+
+    "xmlDescription": {
+      "type": "derived",
+      "valueSource": "description",
+      "valueTransform": "xml",
+      "replaces": "XmlDescription"
+    },
+    "textDescription": {
+      "type": "derived",
+      "valueSource": "description",
+      "valueTransform": "identity",
+      "replaces": "TextDescription"
+    }
+  },
+  "forms": {
+    "identity": { "identifier": "identity" },
+    "xml": { "identifier": "xmlEncode" },
+
+    "separatorsToSpaces": { "identifier": "replace", "pattern": "[\\s_.-]+", "replacement": " " },
+    "splitCamelCase": { "identifier": "replace", "pattern": "(?<=[a-z0-9])(?=[A-Z])", "replacement": " " },
+    "trim": { "identifier": "replace", "pattern": "^ +| +$", "replacement": "" },
+    "title": { "identifier": "titleCase" },
+    "words": { "identifier": "chain", "steps": ["separatorsToSpaces", "splitCamelCase", "trim", "title"] },
+
+    "stripNonAlphanumeric": { "identifier": "replace", "pattern": "[^A-Za-z0-9]", "replacement": "" },
+    "firstUpper": { "identifier": "firstUpperCaseInvariant" },
+    "prefixDigit": { "identifier": "replace", "pattern": "^(?=[0-9])", "replacement": "Mod" },
+    "emptyToMyMod": { "identifier": "replace", "pattern": "^$", "replacement": "MyMod" },
+    "identifier": { "identifier": "chain", "steps": ["stripNonAlphanumeric", "firstUpper", "prefixDigit", "emptyToMyMod"] },
+
+    "emptyToAuthor": { "identifier": "replace", "pattern": "^$", "replacement": "Author" },
+    "packageIdPart": { "identifier": "chain", "steps": ["stripNonAlphanumeric", "firstUpper", "emptyToAuthor"] },
+
+    "escapeBackslash": { "identifier": "replace", "pattern": "\\\\", "replacement": "\\\\" },
+    "escapeQuote": { "identifier": "replace", "pattern": "\"", "replacement": "\\\"" },
+    "csharpString": { "identifier": "chain", "steps": ["escapeBackslash", "escapeQuote"] }
+  },
+  "sources": [
+    {
+      "exclude": [
+        ".template.config/**",
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        "**/*.user",
+        "**/*.lock.json",
+        "**/*.filelist",
+        "1.7/**",
+        ".vs/**",
+        ".idea/**"
+      ],
+      "copyOnly": ["**/*.png", "scripts/**"],
+      "modifiers": [
+        {
+          "condition": "(!xml)",
+          "exclude": ["Defs/**", "Patches/**", "Textures/**"]
+        },
+        {
+          "condition": "(!useCsharp)",
+          "exclude": ["Source/**"]
+        },
+        {
+          "condition": "(!useSettings)",
+          "exclude": ["Languages/**", "Source/RimWorldMod/Settings.cs"]
+        },
+        {
+          "condition": "(!harmony)",
+          "exclude": ["Source/RimWorldMod/Patches/**"]
+        },
+        {
+          "condition": "(!xmlAndCsharp)",
+          "exclude": ["Source/RimWorldMod/Comps/**"]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "condition": "(useCsharp)",
+      "path": "Source/RimWorldMod/RimWorldMod.csproj"
+    }
+  ],
+  "postActions": [
+    {
+      "id": "link",
+      "condition": "(link)",
+      "description": "Link the mod into RimWorld's Mods folder, so the game loads it straight from this folder.",
+      "manualInstructions": [
+        { "text": "Run 'dotnet scripts/symlink.cs' in the mod folder." }
+      ],
+      "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B5D2",
+      "args": {
+        "executable": "dotnet",
+        "args": "scripts/symlink.cs",
+        "redirectStandardOutput": false,
+        "redirectStandardError": false
+      },
+      "continueOnError": true
+    }
+  ]
+}

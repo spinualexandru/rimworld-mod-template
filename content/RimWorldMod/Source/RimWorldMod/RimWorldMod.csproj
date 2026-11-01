@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- RimWorld 1.7 runs on Ludeon's Waylith engine with .NET 10. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>RimWorldMod</RootNamespace>
+    <AssemblyName>RimWorldMod</AssemblyName>
+    <!-- Implicit usings would import System, whose Random/Object clash with UnityEngine's. -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <!-- Build straight into the mod's 1.7/Assemblies folder. -->
+    <OutputPath>../../1.7/Assemblies/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- RimWorld ignores .deps.json files. -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Reference assemblies for the game (Assembly-CSharp, Waylith, UnityStubs, ...).
+      They hold only signatures, so the mod builds without RimWorld installed and
+      nothing from the game gets copied into Assemblies/.
+    -->
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.7.*-*" />
+    <!--#if (harmony) -->
+    <!--
+      Compile-time only. At runtime the Harmony mod (brrainz.harmony, listed in
+      About.xml) provides 0Harmony.dll, so it must not be shipped with this mod.
+    -->
+    <PackageReference Include="Lib.Harmony.Ref" Version="3.*-*" />
+    <!--#endif -->
+  </ItemGroup>
+
+</Project>
