@@ -117,6 +117,10 @@ dotnet new rimworld-mod -n TestMod -o /tmp/TestMod
 dotnet new uninstall ./content/RimWorldMod
 ```
 
+To release, push a version tag: `git tag v0.2.0 && git push origin v0.2.0`. The
+[Publish](https://github.com/spinualexandru/rimworld-mod-template/blob/main/.github/workflows/publish.yml) workflow runs the tests, packs with the tag's version and
+pushes to nuget.org through trusted publishing.
+
 ## RimWorld 1.7 notes
 
 1.7 moved from Unity to Ludeon's own Waylith engine on .NET 10. For modders, that means:

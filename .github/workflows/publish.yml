@@ -1,0 +1,53 @@
+# Publishes the template package to nuget.org when a version tag is pushed:
+#
+#   git tag v0.2.0 && git push origin v0.2.0
+#
+# The package version comes from the tag (v0.2.0 -> 0.2.0), not from the csproj.
+# Publishing uses nuget.org trusted publishing, so there is no API key to store. It needs a
+# trusted publishing policy on nuget.org for this repo and the workflow file publish.yml.
+
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet test tests/RimWorldMod.Templates.Tests
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # lets NuGet/login request a GitHub OIDC token
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Pack
+        run: dotnet pack -c Release -o out -p:Version="${GITHUB_REF_NAME#v}"
+
+      - name: Get a short-lived nuget.org API key
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: alspinu # the nuget.org account whose trusted publishing policy applies
+
+      - name: Push
+        run: >
+          dotnet nuget push "out/*.nupkg"
+          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
+          --source https://api.nuget.org/v3/index.json
